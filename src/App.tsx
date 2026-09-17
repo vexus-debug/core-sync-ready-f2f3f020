@@ -17,6 +17,7 @@ import NotFound from "./pages/NotFound";
 import SiteIndex from "./site/pages/Index";
 import SiteFeatures from "./site/pages/Features";
 import SiteIndustries from "./site/pages/Industries";
+import SiteEyeClinics from "./site/pages/EyeClinics";
 import SiteAbout from "./site/pages/About";
 import SiteContact from "./site/pages/Contact";
 import SitePrivacy from "./site/pages/Privacy";
@@ -179,6 +180,7 @@ const App = () => (
             <Route path="/" element={<SiteIndex />} />
             <Route path="/features" element={<SiteFeatures />} />
             <Route path="/industries" element={<SiteIndustries />} />
+            <Route path="/industries/eye-clinics" element={<SiteEyeClinics />} />
             <Route path="/about" element={<SiteAbout />} />
             <Route path="/contact" element={<SiteContact />} />
             <Route path="/privacy" element={<SitePrivacy />} />
