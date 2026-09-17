@@ -469,3 +469,53 @@
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
 }
+
+/* ── Eye clinics sales page theme (scoped) ── */
+.eye-theme {
+  --background: 197 43% 6%;
+  --foreground: 168 21% 94%;
+  --card: 186 51% 12%;
+  --card-foreground: 168 21% 94%;
+  --popover: 186 51% 12%;
+  --popover-foreground: 168 21% 94%;
+  --primary: 172 84% 39%;
+  --primary-foreground: 197 43% 6%;
+  --secondary: 186 51% 12%;
+  --secondary-foreground: 168 21% 94%;
+  --muted: 186 51% 12%;
+  --muted-foreground: 168 12% 70%;
+  --accent: 172 84% 39%;
+  --accent-foreground: 197 43% 6%;
+  --surface-light: 168 21% 94%;
+  --surface-light-foreground: 197 43% 6%;
+  --border: 172 84% 39%;
+  --input: 172 84% 39%;
+  --ring: 172 84% 39%;
+  --radius: 1.5rem;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: "Manrope", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.eye-theme h1,
+.eye-theme h2,
+.eye-theme h3,
+.eye-theme .font-display {
+  font-family: "Sora", system-ui, sans-serif;
+}
+
+.eye-theme .eye-panel {
+  border: 1px solid hsl(var(--primary) / 0.2);
+  background-color: hsl(var(--card));
+}
+
+.eye-theme .eye-panel-light {
+  background-color: hsl(var(--surface-light));
+  color: hsl(var(--surface-light-foreground));
+}
+
+.eye-theme .eye-panel-accent {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}

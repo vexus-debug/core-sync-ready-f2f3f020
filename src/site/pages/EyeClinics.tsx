@@ -1,68 +1,31 @@
 import Layout from "@/site/components/Layout";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import {
-  Eye, Activity, Glasses, Syringe, LayoutGrid,
-  CheckCircle2, ArrowRight, MessageCircle, Sparkles,
-} from "lucide-react";
+import { ArrowRight, MessageCircle, Check } from "lucide-react";
 
 const WHATSAPP = "https://wa.me/2349017758165";
+const EASE = [0.22, 1, 0.36, 1] as const;
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 32 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } },
+const reveal = {
+  hidden: { opacity: 0, y: 34 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE } },
 };
 
-const slideIn = (dir: "left" | "right") => ({
-  hidden: { opacity: 0, x: dir === "left" ? -60 : 60 },
-  show: { opacity: 1, x: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const } },
+const slide = (dir: "left" | "right" | "up") => ({
+  hidden: {
+    opacity: 0,
+    x: dir === "left" ? -70 : dir === "right" ? 70 : 0,
+    y: dir === "up" ? 60 : 0,
+  },
+  show: { opacity: 1, x: 0, y: 0, transition: { duration: 0.8, ease: EASE } },
 });
 
-const features = [
-  {
-    icon: Eye,
-    title: "One record for every exam and refraction",
-    promise:
-      "Stop reconstructing a patient's history from memory or a paper folder — it's all on one timeline, trending automatically.",
-    detail:
-      "Captures visual acuity (aided/unaided/pinhole), IOP with tonometry method, pupils, anterior segment, fundus, C/D ratio and dilation flag. Full refraction per eye — sphere, cylinder, axis, add, prism, PD — across distance, reading, bifocal, progressive, computer and contact lens prescription types, with issue and expiry dates tracked.",
-  },
-  {
-    icon: Activity,
-    title: "Diagnostic results that plot themselves",
-    promise:
-      "Catch slow changes — like early glaucoma progression — before they become obvious in a single visit.",
-    detail:
-      "Log OCT (macula, RNFL), Humphrey visual fields, fundus photography, fluorescein angiography, corneal topography, pachymetry, biometry/IOL Master, B-scan and specular microscopy, with file uploads attached to findings. IOP, C/D ratio, RNFL and MD/PSD trend automatically, split OD/OS. A single reports view groups every fundus, OCT and field result per patient.",
-  },
-  {
-    icon: Glasses,
-    title: "Dispensing that tracks itself",
-    promise: "Know the status of every fitting and order without opening a chat thread.",
-    detail:
-      "Contact lens fittings record brand, type, modality, base curve, diameter, powers and fit assessment, with aftercare check dates scheduled automatically from the fitting date. Optical orders track frame, lens type, coatings and lab routing through ordered → at lab → ready → collected, against promised and delivery dates.",
-  },
-  {
-    icon: Syringe,
-    title: "Surgery bookings with nothing left loose",
-    promise: "Everything surgery day needs is attached to the booking, not scattered across folders.",
-    detail:
-      "Book by procedure (phaco, trabeculectomy, YAG, pterygium, anti-VEGF injections and others), eye side and theatre. Biometry-based IOL power selection, pre-op checklists and eye-specific consent forms are tracked against the same record, with outcome notes after.",
-  },
-  {
-    icon: LayoutGrid,
-    title: "The rest of the clinic, not bolted on separately",
-    promise: "One system instead of three or four you have to keep in sync.",
-    detail:
-      "Appointments and waiting list, invoicing and payments, inventory for drops, lenses and frames, pharmacy prescriptions, staff and schedules, and analytics across the whole clinic.",
-  },
-];
+const viewport = { once: true, margin: "-70px" };
 
 const plans = [
-  { price: "₦15,000", period: "every 3 months" },
-  { price: "₦30,000", period: "every 6 months", highlight: true },
-  { price: "₦60,000", period: "every 12 months" },
+  { label: "Quarterly", price: "₦15,000", period: "every 3 months" },
+  { label: "Half-yearly", price: "₦30,000", period: "every 6 months", featured: true },
+  { label: "Yearly", price: "₦60,000", period: "every 12 months" },
 ];
 
 const included = [
@@ -76,270 +39,351 @@ const included = [
 const EyeClinics = () => {
   return (
     <Layout>
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[hsl(var(--clinic-navy))] via-[hsl(var(--clinic-navy-light))] to-[hsl(var(--clinic-teal))] py-28 text-primary-foreground">
-        <motion.div
-          aria-hidden
-          className="pointer-events-none absolute -right-24 -top-24 h-[28rem] w-[28rem] rounded-full bg-primary-foreground/10 blur-3xl"
-          animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.8, 0.5] }}
-          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          aria-hidden
-          className="pointer-events-none absolute -bottom-32 -left-20 h-[24rem] w-[24rem] rounded-full bg-primary-foreground/10 blur-3xl"
-          animate={{ scale: [1.1, 1, 1.1], opacity: [0.4, 0.7, 0.4] }}
-          transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
-        />
+      <div className="eye-theme">
+        <div className="mx-auto max-w-6xl px-6 py-24">
+          {/* Hero */}
+          <header className="mb-24 text-center">
+            <motion.p
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="mb-5 text-xs font-semibold uppercase tracking-[0.25em] text-primary"
+            >
+              Clinexus for Eye Clinics
+            </motion.p>
 
-        <div className="container relative mx-auto max-w-4xl px-4 text-center">
-          <motion.span
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 rounded-full bg-primary-foreground/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider backdrop-blur"
-          >
-            <Eye className="h-3.5 w-3.5" /> Clinexus for Eye Clinics
-          </motion.span>
+            <motion.h1
+              initial="hidden"
+              animate="show"
+              variants={reveal}
+              className="mx-auto mb-8 max-w-4xl text-4xl font-bold leading-tight text-foreground md:text-6xl"
+            >
+              Your patients trust you with their{" "}
+              <span className="text-primary">sight</span>. Your systems shouldn't make that harder.
+            </motion.h1>
 
-          <motion.h1
-            initial="hidden"
-            animate="show"
-            variants={fadeUp}
-            className="mt-6 text-4xl font-bold leading-tight tracking-tight md:text-6xl"
-          >
-            Your patients trust you with their sight. Your systems shouldn't make that harder.
-          </motion.h1>
+            <motion.p
+              initial="hidden"
+              animate="show"
+              variants={reveal}
+              transition={{ delay: 0.12 }}
+              className="mx-auto mb-6 max-w-2xl text-lg leading-relaxed text-muted-foreground"
+            >
+              A missing IOP trend, a forgotten contact lens aftercare check, an optical order tracked in a
+              WhatsApp thread — none of it is dramatic on its own. Together, it's what keeps a well-run clinic
+              from feeling like one.
+            </motion.p>
 
-          <motion.p
-            initial="hidden"
-            animate="show"
-            variants={fadeUp}
-            transition={{ delay: 0.15 }}
-            className="mx-auto mt-6 max-w-2xl text-lg text-primary-foreground/85"
-          >
-            A missing IOP trend, a forgotten contact lens aftercare check, an optical order tracked in a
-            WhatsApp thread — none of it is dramatic on its own. Together, it's what keeps a well-run clinic
-            from feeling like one.
-          </motion.p>
+            <motion.p
+              initial="hidden"
+              animate="show"
+              variants={reveal}
+              transition={{ delay: 0.2 }}
+              className="mx-auto mb-10 max-w-2xl leading-relaxed text-muted-foreground/80"
+            >
+              Clinexus is a clinic management system built specifically around eye care — exams, refraction,
+              diagnostics, dispensing, surgery and the everyday admin, in one place.
+            </motion.p>
 
-          <motion.p
-            initial="hidden"
-            animate="show"
-            variants={fadeUp}
-            transition={{ delay: 0.25 }}
-            className="mx-auto mt-4 max-w-2xl text-base text-primary-foreground/70"
-          >
-            Clinexus is a clinic management system built specifically around eye care — exams, refraction,
-            diagnostics, dispensing, surgery and the everyday admin, in one place.
-          </motion.p>
-
-          <motion.div
-            initial="hidden"
-            animate="show"
-            variants={fadeUp}
-            transition={{ delay: 0.35 }}
-            className="mt-10 flex flex-wrap items-center justify-center gap-4"
-          >
-            <Button size="lg" variant="secondary" asChild className="group">
-              <a href={WHATSAPP} target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="mr-2 h-5 w-5" />
+            <motion.div
+              initial="hidden"
+              animate="show"
+              variants={reveal}
+              transition={{ delay: 0.3 }}
+              className="flex flex-col items-center justify-center gap-4 md:flex-row"
+            >
+              <a
+                href={WHATSAPP}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-10 py-4 font-bold text-primary-foreground transition-colors hover:bg-foreground"
+              >
+                <MessageCircle className="h-5 w-5" />
                 Talk to us on WhatsApp
               </a>
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              asChild
-              className="border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/10"
-            >
-              <Link to="/features">
-                See the full feature list
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Credibility */}
-      <section className="border-b border-border bg-accent/40 py-14">
-        <motion.p
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-80px" }}
-          variants={fadeUp}
-          className="container mx-auto max-w-3xl px-4 text-center text-lg text-accent-foreground"
-        >
-          Clinexus is built working directly alongside dental and eye clinics — the eye clinic workflow below
-          was shaped with practitioners who deal with these exact records every day, not designed in the
-          abstract and hoped to fit.
-        </motion.p>
-      </section>
-
-      {/* Features */}
-      <section className="py-24">
-        <div className="container mx-auto max-w-5xl px-4">
-          <motion.div
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            variants={fadeUp}
-            className="mb-16 max-w-2xl"
-          >
-            <span className="inline-flex items-center gap-2 rounded-full bg-secondary px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-secondary-foreground">
-              <Sparkles className="h-3.5 w-3.5" /> What's actually in it
-            </span>
-            <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-              What it does, specifically
-            </h2>
-          </motion.div>
-
-          <div className="space-y-8">
-            {features.map((f, i) => (
-              <motion.article
-                key={f.title}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, margin: "-60px" }}
-                variants={slideIn(i % 2 === 0 ? "left" : "right")}
-                whileHover={{ y: -4 }}
-                className="group relative overflow-hidden rounded-2xl border border-border bg-card p-8 shadow-sm transition-shadow hover:shadow-xl md:p-10"
+              <Link
+                to="/features"
+                className="inline-flex items-center gap-2 rounded-full border border-primary px-10 py-4 font-bold text-primary transition-colors hover:bg-primary/10"
               >
-                <span className="absolute right-6 top-4 text-6xl font-bold text-muted/60 md:text-7xl">
-                  {i + 1}
-                </span>
-                <div className="relative flex flex-col gap-6 md:flex-row">
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform duration-300 group-hover:scale-110">
-                    <f.icon className="h-7 w-7" />
-                  </div>
-                  <div className="space-y-4">
-                    <h3 className="text-xl font-bold text-foreground md:text-2xl">{f.title}</h3>
-                    <p className="text-base font-medium text-primary">{f.promise}</p>
-                    <p className="text-muted-foreground">{f.detail}</p>
-                  </div>
-                </div>
-              </motion.article>
-            ))}
-          </div>
-        </div>
-      </section>
+                See the full feature list
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </motion.div>
 
-      {/* Pricing */}
-      <section className="bg-muted/50 py-24">
-        <div className="container mx-auto max-w-5xl px-4">
-          <motion.div
+            <motion.p
+              initial="hidden"
+              whileInView="show"
+              viewport={viewport}
+              variants={reveal}
+              className="mx-auto mt-12 max-w-3xl border-t border-primary/20 pt-8 text-sm leading-relaxed text-muted-foreground"
+            >
+              Clinexus is built working directly alongside dental and eye clinics — the eye clinic workflow
+              below was shaped with practitioners who deal with these exact records every day, not designed in
+              the abstract and hoped to fit.
+            </motion.p>
+          </header>
+
+          {/* Bento capabilities */}
+          <motion.h2
             initial="hidden"
             whileInView="show"
-            viewport={{ once: true }}
-            variants={fadeUp}
-            className="mx-auto mb-14 max-w-2xl space-y-4 text-center"
+            viewport={viewport}
+            variants={reveal}
+            className="mb-10 text-2xl font-bold text-foreground md:text-3xl"
           >
-            <span className="inline-block rounded-full bg-secondary px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-secondary-foreground">
+            What's actually in it —{" "}
+            <span className="text-muted-foreground">what it does, specifically</span>
+          </motion.h2>
+
+          <div className="mb-24 grid grid-cols-12 gap-4">
+            {/* 01 */}
+            <motion.article
+              initial="hidden"
+              whileInView="show"
+              viewport={viewport}
+              variants={slide("left")}
+              whileHover={{ y: -5 }}
+              className="eye-panel col-span-12 flex min-h-[400px] flex-col justify-between rounded-3xl p-8 md:col-span-8"
+            >
+              <div>
+                <span className="font-display text-5xl font-bold text-primary/30">01</span>
+                <h3 className="mb-2 mt-4 text-2xl font-bold text-card-foreground">
+                  One record for every exam and refraction
+                </h3>
+                <p className="mb-4 font-medium text-primary">
+                  Stop reconstructing a patient's history from memory or a paper folder — it's all on one
+                  timeline, trending automatically.
+                </p>
+                <p className="max-w-2xl leading-relaxed text-muted-foreground">
+                  Captures visual acuity (aided/unaided/pinhole), IOP with tonometry method, pupils, anterior
+                  segment, fundus, C/D ratio and dilation flag. Full refraction per eye — sphere, cylinder,
+                  axis, add, prism, PD — across distance, reading, bifocal, progressive, computer and contact
+                  lens prescription types, with issue and expiry dates tracked.
+                </p>
+              </div>
+              <div className="mt-8 flex gap-2 overflow-hidden">
+                {["OD / OS timeline", "Refraction history", "IOP + C/D trend"].map((label, i) => (
+                  <motion.div
+                    key={label}
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={viewport}
+                    transition={{ delay: 0.25 + i * 0.12, duration: 0.6, ease: EASE }}
+                    className="flex h-20 flex-1 items-end rounded-xl border border-primary/10 bg-background p-3 text-[11px] uppercase tracking-wide text-muted-foreground/70"
+                  >
+                    {label}
+                  </motion.div>
+                ))}
+              </div>
+            </motion.article>
+
+            {/* 02 */}
+            <motion.article
+              initial="hidden"
+              whileInView="show"
+              viewport={viewport}
+              variants={slide("right")}
+              whileHover={{ y: -5 }}
+              className="eye-panel-light col-span-12 rounded-3xl p-8 md:col-span-4"
+            >
+              <span className="font-display text-5xl font-bold opacity-20">02</span>
+              <h3 className="mb-2 mt-4 text-2xl font-bold">Diagnostic results that plot themselves</h3>
+              <p className="mb-4 font-medium opacity-80">
+                Catch slow changes — like early glaucoma progression — before they become obvious in a single
+                visit.
+              </p>
+              <p className="text-sm leading-relaxed opacity-70">
+                Log OCT (macula, RNFL), Humphrey visual fields, fundus photography, fluorescein angiography,
+                corneal topography, pachymetry, biometry/IOL Master, B-scan and specular microscopy, with file
+                uploads attached to findings. IOP, C/D ratio, RNFL and MD/PSD trend automatically, split
+                OD/OS. A single reports view groups every fundus, OCT and field result per patient.
+              </p>
+            </motion.article>
+
+            {/* 03 */}
+            <motion.article
+              initial="hidden"
+              whileInView="show"
+              viewport={viewport}
+              variants={slide("up")}
+              whileHover={{ y: -5 }}
+              className="eye-panel col-span-12 rounded-3xl p-8 md:col-span-4"
+            >
+              <span className="font-display text-5xl font-bold text-primary/30">03</span>
+              <h3 className="mb-2 mt-4 text-xl font-bold text-card-foreground">
+                Dispensing that tracks itself
+              </h3>
+              <p className="mb-2 font-medium text-primary">
+                Know the status of every fitting and order without opening a chat thread.
+              </p>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                Contact lens fittings record brand, type, modality, base curve, diameter, powers and fit
+                assessment, with aftercare check dates scheduled automatically from the fitting date. Optical
+                orders track frame, lens type, coatings and lab routing through ordered → at lab → ready →
+                collected, against promised and delivery dates.
+              </p>
+            </motion.article>
+
+            {/* 04 */}
+            <motion.article
+              initial="hidden"
+              whileInView="show"
+              viewport={viewport}
+              variants={slide("up")}
+              transition={{ delay: 0.1 }}
+              whileHover={{ y: -5 }}
+              className="eye-panel col-span-12 rounded-3xl p-8 md:col-span-4"
+            >
+              <span className="font-display text-5xl font-bold text-primary/30">04</span>
+              <h3 className="mb-2 mt-4 text-xl font-bold text-card-foreground">
+                Surgery bookings with nothing left loose
+              </h3>
+              <p className="mb-2 font-medium text-primary">
+                Everything surgery day needs is attached to the booking, not scattered across folders.
+              </p>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                Book by procedure (phaco, trabeculectomy, YAG, pterygium, anti-VEGF injections and others),
+                eye side and theatre. Biometry-based IOL power selection, pre-op checklists and eye-specific
+                consent forms are tracked against the same record, with outcome notes after.
+              </p>
+            </motion.article>
+
+            {/* 05 */}
+            <motion.article
+              initial="hidden"
+              whileInView="show"
+              viewport={viewport}
+              variants={slide("up")}
+              transition={{ delay: 0.2 }}
+              whileHover={{ y: -5 }}
+              className="eye-panel-accent col-span-12 rounded-3xl p-8 md:col-span-4"
+            >
+              <span className="font-display text-5xl font-bold opacity-30">05</span>
+              <h3 className="mb-2 mt-4 text-xl font-bold">
+                The rest of the clinic, not bolted on separately
+              </h3>
+              <p className="mb-2 font-medium opacity-80">
+                One system instead of three or four you have to keep in sync.
+              </p>
+              <p className="text-sm leading-relaxed opacity-90">
+                Appointments and waiting list, invoicing and payments, inventory for drops, lenses and frames,
+                pharmacy prescriptions, staff and schedules, and analytics across the whole clinic.
+              </p>
+            </motion.article>
+          </div>
+
+          {/* Pricing */}
+          <motion.section
+            initial="hidden"
+            whileInView="show"
+            viewport={viewport}
+            variants={reveal}
+            className="eye-panel rounded-[3rem] p-8 text-center md:p-12"
+            style={{ borderColor: "hsl(var(--primary) / 0.3)" }}
+          >
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-primary">
               Getting started
-            </span>
-            <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+            </p>
+            <h2 className="mb-4 text-3xl font-bold text-card-foreground">
               One plan, everything above included
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="mx-auto mb-12 max-w-2xl text-muted-foreground">
               No tier that holds back diagnostics or surgery tracking until you pay more — clinical,
               dispensing, diagnostics, surgery and admin are all included from day one. Choose the billing
               period that suits your clinic.
             </p>
-          </motion.div>
 
-          <div className="grid gap-6 md:grid-cols-3">
-            {plans.map((p, i) => (
-              <motion.div
-                key={p.period}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true }}
-                variants={fadeUp}
-                transition={{ delay: i * 0.12, duration: 0.6 }}
-                whileHover={{ y: -6 }}
-                className={`rounded-2xl border p-8 text-center shadow-sm transition-shadow hover:shadow-xl ${
-                  p.highlight
-                    ? "border-primary bg-card ring-2 ring-primary/30"
-                    : "border-border bg-card"
-                }`}
-              >
-                <div className="text-4xl font-bold text-foreground">{p.price}</div>
-                <div className="mt-2 text-sm uppercase tracking-wide text-muted-foreground">{p.period}</div>
-              </motion.div>
-            ))}
-          </div>
+            <div className="mx-auto mb-12 grid max-w-4xl gap-8 md:grid-cols-3">
+              {plans.map((p, i) => (
+                <motion.div
+                  key={p.period}
+                  initial={{ opacity: 0, y: 28 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={viewport}
+                  transition={{ delay: i * 0.12, duration: 0.6, ease: EASE }}
+                  whileHover={{ y: -6 }}
+                  className={
+                    p.featured
+                      ? "eye-panel-accent scale-105 rounded-2xl p-6 shadow-xl"
+                      : "rounded-2xl bg-background/50 p-6"
+                  }
+                >
+                  <p
+                    className={
+                      p.featured
+                        ? "mb-2 text-sm font-bold opacity-70"
+                        : "mb-2 text-sm text-muted-foreground"
+                    }
+                  >
+                    {p.label}
+                  </p>
+                  <div
+                    className={p.featured ? "text-3xl font-bold" : "text-3xl font-bold text-primary"}
+                  >
+                    {p.price}
+                  </div>
+                  <p className={p.featured ? "mt-1 text-xs opacity-60" : "mt-1 text-xs text-muted-foreground/60"}>
+                    {p.period}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
 
-          <motion.div
+            <div className="mx-auto max-w-2xl text-left">
+              <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                Included at every tier
+              </p>
+              <div className="grid gap-4 md:grid-cols-2">
+                {included.map((item) => (
+                  <div key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.section>
+
+          {/* Final CTA */}
+          <motion.section
             initial="hidden"
             whileInView="show"
-            viewport={{ once: true }}
-            variants={fadeUp}
-            className="mx-auto mt-12 max-w-2xl rounded-2xl border border-border bg-card p-8"
+            viewport={viewport}
+            variants={reveal}
+            className="mt-24 text-center"
           >
-            <h3 className="mb-5 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-              Included at every tier
-            </h3>
-            <ul className="space-y-3">
-              {included.map((item) => (
-                <li key={item} className="flex items-start gap-3 text-foreground">
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[hsl(var(--clinic-teal))] to-[hsl(var(--clinic-navy))] py-24 text-primary-foreground">
-        <motion.div
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-0 h-96 w-96 -translate-x-1/2 rounded-full bg-primary-foreground/10 blur-3xl"
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          variants={fadeUp}
-          className="container relative mx-auto max-w-3xl px-4 text-center"
-        >
-          <span className="inline-block rounded-full bg-primary-foreground/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider backdrop-blur">
-            Next step
-          </span>
-          <h2 className="mt-6 text-3xl font-bold tracking-tight md:text-4xl">
-            See it against your own patient records
-          </h2>
-          <p className="mt-5 text-lg text-primary-foreground/85">
-            Tell us how your clinic currently handles exams, dispensing and surgery bookings, and we'll show
-            you exactly how Clinexus fits in — using your workflow, not a generic demo.
-          </p>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <Button size="lg" variant="secondary" asChild>
-              <a href={WHATSAPP} target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="mr-2 h-5 w-5" />
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-primary">Next step</p>
+            <h2 className="mb-5 text-3xl font-bold text-foreground">
+              See it against your own patient records
+            </h2>
+            <p className="mx-auto mb-10 max-w-2xl leading-relaxed text-muted-foreground">
+              Tell us how your clinic currently handles exams, dispensing and surgery bookings, and we'll show
+              you exactly how Clinexus fits in — using your workflow, not a generic demo.
+            </p>
+            <div className="inline-flex flex-col gap-4 md:flex-row">
+              <a
+                href={WHATSAPP}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-10 py-4 font-bold text-primary-foreground transition-colors hover:bg-foreground"
+              >
+                <MessageCircle className="h-5 w-5" />
                 Talk to us on WhatsApp
               </a>
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              asChild
-              className="border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/10"
-            >
-              <Link to="/demo">
+              <Link
+                to="/demo"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-primary px-10 py-4 font-bold text-primary transition-colors hover:bg-primary/10"
+              >
                 Try demo
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <ArrowRight className="h-4 w-4" />
               </Link>
-            </Button>
-          </div>
-          <p className="mt-10 text-sm text-primary-foreground/70">
-            Clinexus — clinic management built for how you actually work.
-          </p>
-        </motion.div>
-      </section>
+            </div>
+            <p className="mt-6 text-sm text-muted-foreground/60">
+              Clinexus — clinic management built for how you actually work.
+            </p>
+          </motion.section>
+        </div>
+      </div>
     </Layout>
   );
 };
